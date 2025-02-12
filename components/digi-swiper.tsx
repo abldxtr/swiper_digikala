@@ -23,12 +23,12 @@ export default function DigiSwiper() {
   };
 
   return (
-    <div className="w-full mx-auto  relative   ">
+    <div className="w-full mx-auto  relative isolate   ">
       {/* Main Slider */}
       <Swiper
         onSwiper={setSwiperRef}
         spaceBetween={5}
-        className="rounded-lg"
+        className="rounded-lg relative z-[10] "
         // loop={true}
         onSlideChange={handleSlideChange}
         speed={500}
@@ -41,9 +41,20 @@ export default function DigiSwiper() {
         pagination={{ clickable: true }}
         slidesPerView={8}
         dir="rtl"
+        breakpoints={{
+          640: {
+            slidesPerView: 3,
+          },
+          768: {
+            slidesPerView: 5,
+          },
+          1024: {
+            slidesPerView: 8,
+          },
+        }}
       >
         <SwiperSlide>
-          <div className="flex flex-col items-center text-white ">
+          <div className="flex flex-col items-center justify-center gap-y-3 text-white ">
             <img
               src="https://www.digikala.com/statics/img/svg/specialCarousel/Amazings.svg"
               alt="ddd"
@@ -58,45 +69,47 @@ export default function DigiSwiper() {
             <div>مشاهده همه</div>
           </div>
         </SwiperSlide>
-        {[...products, ...products].map((product, index) => (
-          <SwiperSlide key={index}>
-            <div
-              className={cn(
-                "bg-white border-[2px]  space-y-[20px] p-[16px] !pt-0 h-[254px]   border-[#F2F2F2] overflow-hidden flex items-center w-full  flex-col ",
-                index === 0 && "rounded-r-[15px]"
-              )}
-            >
-              <img
-                src={product.image}
-                alt={product.title}
-                className="w-auto h-[132px] object-cover"
-              />
-              <div className="p-4" dir="rtl">
-                <h3 className="text-[12px] font-normal text-center mb-2 text-[#62666d]  ">
-                  {product.title}
-                </h3>
+        {[...products, ...products].map((product, index) => {
+          return (
+            <SwiperSlide key={index} className="relative">
+              <div
+                className={cn(
+                  "bg-white border-[2px]  space-y-[20px] p-[16px] !pt-0 h-[254px] z-[1000]  border-[#F2F2F2] overflow-hidden flex items-center w-full  flex-col ",
+                  index === 0 && "rounded-r-[15px]"
+                )}
+              >
+                <img
+                  src={product.image}
+                  alt={product.title}
+                  className="w-auto h-[132px] object-cover"
+                />
+                <div className="p-4" dir="rtl">
+                  <h3 className="text-[12px] font-normal text-center mb-2 text-[#62666d]  ">
+                    {product.title}
+                  </h3>
 
-                <div className="mt-2  flex items-center justify-between ">
-                  <div className=" text-[#3f4064] text-[12px] ">
-                    {product.final_price}
-                  </div>
-                  <div className="bg-[#EF3A4F] text-[12px] text-white p-1 rounded-full font-bold">
-                    {product.discount}
-                  </div>
+                  <div className="mt-2  flex items-center justify-between ">
+                    <div className=" text-[#3f4064] text-[12px] ">
+                      {product.final_price}
+                    </div>
+                    <div className="bg-[#EF3A4F] text-[12px] text-white p-1 rounded-full font-bold">
+                      {product.discount}
+                    </div>
 
-                  {/* <span className="text-gray-400 font-bold">
+                    {/* <span className="text-gray-400 font-bold">
                     <svg className="size-[16px]">
                       <use xlinkHref="#toman"></use>
                     </svg>
                   </span> */}
-                </div>
-                <div className="text-[#3f4064] mr-2 text-[12px]  ">
-                  {product.original_price}
+                  </div>
+                  <div className="text-[#3f4064] mr-2 text-[12px]  ">
+                    {product.original_price}
+                  </div>
                 </div>
               </div>
-            </div>
-          </SwiperSlide>
-        ))}
+            </SwiperSlide>
+          );
+        })}
         <SwiperSlide>
           <div className="flex flex-col items-center  bg-white justify-center h-[254px] rounded-l-[15px] ml-5 ">
             {/* <div className="rounded-full p-2 border-solid border-2 !border-[#19bfd3]"> */}
