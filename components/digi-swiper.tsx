@@ -1,9 +1,7 @@
 "use client";
-
 import "swiper/css";
 import "swiper/css/effect-fade";
-
-import { EffectFade, FreeMode, Navigation, Pagination } from "swiper/modules";
+import { FreeMode, Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as SwiperType } from "swiper";
 import { useState } from "react";
@@ -13,23 +11,34 @@ import { CircleArrowLeft } from "lucide-react";
 export default function DigiSwiper() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [swiperRef, setSwiperRef] = useState<SwiperType | null>(null);
-
-  // اسلایدهای استخراج شده از HTML
   const slides = digiItems;
-  const products = digiItems;
-
+  const products = [...digiItems, ...digiItems];
   const handleSlideChange = (swiper: SwiperType) => {
     setActiveIndex(swiper.realIndex);
   };
 
+  const SeeAllSlide = () => (
+    <div className="flex flex-col items-center bg-white justify-center h-[254px] rounded-l-[15px] ml-5">
+      <div className="flex fill-[#19bfd3] text-[#19bfd3]">
+        <CircleArrowLeft size={32} />
+      </div>
+      <div>مشاهده همه</div>
+    </div>
+  );
+
   return (
-    <div className="w-full mx-auto  relative isolate   ">
-      {/* Main Slider */}
+    <div className="w-full mx-auto relative isolate">
+      <style>
+        {`
+          .swiper-slide:not(.swiper-slide-active) {
+              opacity: 1 !important;
+          }
+        `}
+      </style>
       <Swiper
         onSwiper={setSwiperRef}
         spaceBetween={5}
-        className="rounded-lg relative z-[10] "
-        // loop={true}
+        className="rounded-lg relative z-[10]"
         onSlideChange={handleSlideChange}
         speed={500}
         modules={[Navigation, Pagination, FreeMode]}
@@ -42,6 +51,9 @@ export default function DigiSwiper() {
         slidesPerView={8}
         dir="rtl"
         breakpoints={{
+          320: {
+            slidesPerView: 2,
+          },
           640: {
             slidesPerView: 3,
           },
@@ -54,7 +66,7 @@ export default function DigiSwiper() {
         }}
       >
         <SwiperSlide>
-          <div className="flex flex-col items-center justify-center gap-y-3 text-white ">
+          <div className="flex flex-col items-center justify-center gap-y-3 text-white">
             <img
               src="https://www.digikala.com/statics/img/svg/specialCarousel/Amazings.svg"
               alt="ddd"
@@ -69,40 +81,38 @@ export default function DigiSwiper() {
             <div>مشاهده همه</div>
           </div>
         </SwiperSlide>
-        {[...products, ...products].map((product, index) => {
+        {products.map((product, index) => {
           return (
-            <SwiperSlide key={index} className="relative">
+            <SwiperSlide
+              key={index}
+              className="relative"
+              aria-label={`Slide ${index + 1}`}
+            >
               <div
                 className={cn(
-                  "bg-white border-[2px]  space-y-[20px] p-[16px] !pt-0 h-[254px] z-[1000]  border-[#F2F2F2] overflow-hidden flex items-center w-full  flex-col ",
+                  "bg-white border-[2px] space-y-[20px] p-[16px] !pt-0 h-[254px] z-[1000] border-[#F2F2F2] overflow-hidden flex items-center w-full flex-col",
                   index === 0 && "rounded-r-[15px]"
                 )}
               >
                 <img
                   src={product.image}
                   alt={product.title}
+                  loading="lazy"
                   className="w-auto h-[132px] object-cover"
                 />
-                <div className="p-4" dir="rtl">
-                  <h3 className="text-[12px] font-normal text-center mb-2 text-[#62666d]  ">
+                <div className="" dir="rtl">
+                  <h3 className="text-[12px] font-normal text-center mb-2 text-[#62666d]">
                     {product.title}
                   </h3>
-
-                  <div className="mt-2  flex items-center justify-between ">
-                    <div className=" text-[#3f4064] text-[12px] ">
+                  <div className="mt-2 flex items-center justify-between">
+                    <div className="text-[#3f4064] text-[12px]">
                       {product.final_price}
                     </div>
                     <div className="bg-[#EF3A4F] text-[12px] text-white p-1 rounded-full font-bold">
                       {product.discount}
                     </div>
-
-                    {/* <span className="text-gray-400 font-bold">
-                    <svg className="size-[16px]">
-                      <use xlinkHref="#toman"></use>
-                    </svg>
-                  </span> */}
                   </div>
-                  <div className="text-[#3f4064] mr-2 text-[12px]  ">
+                  <div className="text-[#3f4064] mr-2 text-[12px]">
                     {product.original_price}
                   </div>
                 </div>
@@ -111,14 +121,7 @@ export default function DigiSwiper() {
           );
         })}
         <SwiperSlide>
-          <div className="flex flex-col items-center  bg-white justify-center h-[254px] rounded-l-[15px] ml-5 ">
-            {/* <div className="rounded-full p-2 border-solid border-2 !border-[#19bfd3]"> */}
-            <div className="flex fill-[#19bfd3] text-[#19bfd3] ">
-              <CircleArrowLeft size={32} />
-            </div>
-            <div>مشاهده همه</div>
-            {/* </div> */}
-          </div>
+          <SeeAllSlide />
         </SwiperSlide>
       </Swiper>
     </div>
@@ -152,33 +155,6 @@ export const digiItems = [
     final_price: "83,000",
     original_price: "102,600",
     link: "/product/dkp-9095788/",
-  },
-  {
-    title: "دستمال توالت فول تایم مدل رولی بسته 24 عددی",
-    image:
-      "https://dkstatics-public.digikala.com/digikala-products/24119e7acddfe78db5c6c50c143a8af1e2fb18f8_1671955744.jpg",
-    discount: "20٪",
-    final_price: "316,000",
-    original_price: "393,900",
-    link: "/product/dkp-10249533/",
-  },
-  {
-    title: "دستمال توالت فول تایم مدل رولی بسته 24 عددی",
-    image:
-      "https://dkstatics-public.digikala.com/digikala-products/24119e7acddfe78db5c6c50c143a8af1e2fb18f8_1671955744.jpg",
-    discount: "20٪",
-    final_price: "316,000",
-    original_price: "393,900",
-    link: "/product/dkp-10249533/",
-  },
-  {
-    title: "دستمال توالت فول تایم مدل رولی بسته 24 عددی",
-    image:
-      "https://dkstatics-public.digikala.com/digikala-products/24119e7acddfe78db5c6c50c143a8af1e2fb18f8_1671955744.jpg",
-    discount: "20٪",
-    final_price: "316,000",
-    original_price: "393,900",
-    link: "/product/dkp-10249533/",
   },
   {
     title: "دستمال توالت فول تایم مدل رولی بسته 24 عددی",
